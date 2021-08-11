@@ -1,6 +1,7 @@
 package br.com.grupocampanha.xml;
 
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
+import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import br.com.grupocampanha.xml.exceptions.NodeIndexOfBoundsException;
@@ -94,12 +95,12 @@ public class Node {
         }
     }
 
-    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException, IllegalNodePropetyNameException {
+    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
         if (Utilitario.contemCaracterEspecial(propriedade)) {
             throw new IllegalNodePropetyNameException();
         }
         if (Utilitario.contemCaracterEspecial(Valor, true,'"')) {
-            throw new IllegalNodePropetyNameException();
+            throw new IllegalNodePropetyValueException();
         }
 
         this.propriedades.put(propriedade, Valor);

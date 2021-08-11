@@ -6,6 +6,7 @@
 package br.com.grupocampanha.xml;
 
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
+import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
@@ -19,17 +20,19 @@ import java.nio.file.Files;
  */
 public class XML {
 
-    public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException {
-        String xml = new String(Files.readAllBytes(arquivo.toPath())).replace("\n", "").replace("\t", "");
+    public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
+        String xml = new String(Files.readAllBytes(arquivo.toPath())).replace("\n", "").replace("\t", "").replace("\r", "");
         Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
         xml = xml.substring(xml.indexOf('>') + 1);
-     if(!subNode(xml, nodePai).equals("")){
-     throw new UnformattedXmlException();
-     }
+       
+      
+    if(!subNode(xml, nodePai).equals("")){
+   throw new UnformattedXmlException();
+   }
         return nodePai;
     }
 
-    private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException {
+    private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
         String nome = "";
         Node node = null;
         boolean primeiraLetra = false;
@@ -91,7 +94,7 @@ public class XML {
         return node;
     }
 
-    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException  {
+    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, IllegalNodePropetyValueException  {
         if (!fragmento.equals("")) {
             String nodeString = "";
             int indexAbridor = fragmento.indexOf('<');
