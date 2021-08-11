@@ -1,0 +1,203 @@
+package br.com.grupocampanha.xml;
+
+import br.com.grupocampanha.xml.exceptions.InsertNodeException;
+import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
+import java.util.HashMap;
+import java.util.Map;
+import br.com.grupocampanha.xml.interfaces.Find;
+
+public class Node {
+
+    private Map<String, String> propriedades = new HashMap<String, String>();
+    private String valor;
+    private Node[] nodes = new Node[0];
+    private String nome;
+    private int tamanho = 0;
+    private int tamanhoAtributo = 0;
+
+    public Node(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void mudarNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void adicionarNode(Node node) throws InsertNodeException   {
+        if (valor != null) {
+            throw new InsertNodeException();
+        }
+        nodes = redimensionarArray(nodes, nodes.length + 1);
+        nodes[nodes.length - 1] = node;
+        tamanho++;
+    }
+
+    public boolean removerNode(Node node) {
+        tamanho--;
+        for (int i = 0; i < nodes.length; i++) {
+            if (nodes[i].equals(node)) {
+                for (int k = i; k < nodes.length - 1; i++) {
+                    nodes[i] = nodes[i + 1];
+                }
+                nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removerNode(int index) {
+        tamanho--;
+        for (int i = index; i < nodes.length - 1; i++) {
+            nodes[i] = nodes[i + 1];
+        }
+        nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
+    }
+
+    public void setValor(String valor) throws InsertNodeValueException  {
+        if (nodes.length > 0) {
+            throw new InsertNodeValueException();
+        }
+        this.valor = valor;
+    }
+
+    public String getValor() {
+        return valor;
+    }
+
+    public String getPropriedade(String propriedade) {
+        return propriedades.get(propriedade);
+    }
+
+    public String propriedadeAt(int index) {
+        return (String) propriedades.values().toArray()[index];
+    }
+
+    public Node nodeAt(int index) {
+        return nodes[index];
+    }
+
+    public void adicionarPropriedade(String propriedade, String Valor) {
+        this.propriedades.put(propriedade, Valor);
+        tamanhoAtributo++;
+    }
+
+    public void removerPropriedade(String propriedade) {
+        this.propriedades.remove(propriedade);
+        tamanhoAtributo--;
+    }
+
+    private Node[] redimensionarArray(Node[] array, int novoTamanho) {
+        Node[] novoArray = new Node[novoTamanho];
+        for (int i = 0; i < (novoTamanho <= 0 ? novoArray.length : array.length); i++) {
+            novoArray[i] = array[i];
+        }
+        return novoArray;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<" + nome);
+        if (propriedades != null) {
+            Object[] chaves = propriedades.keySet().toArray();
+            Object[] valores = propriedades.values().toArray();
+            for (int i = 0; i < chaves.length; i++) {
+                if (((String) valores[i]).contains("\"")) {
+                    sb.append(" " + chaves[i] + "='" + valores[i] + "'");
+                } else {
+                    sb.append(" " + chaves[i] + "=\"" + valores[i] + "\"");
+                }
+            }
+        }
+
+        if (valor == null && nodes.length == 0) {
+            sb.append("/>");
+            return sb.toString();
+        }
+        sb.append(">");
+        if (valor != null) {
+            sb.append(valor);
+        }
+
+        for (int i = 0; i < nodes.length; i++) {
+
+            sb.append("" + nodes[i].toString());
+        }
+        sb.append("</" + nome + ">");
+        return sb.toString();
+    }
+
+    public Node find(Find f) {
+        for (int i = 0; i < nodes.length; i++) {
+            if (f.find(nodes[i])) {
+                return nodes[i];
+            }
+        }
+        return null;
+
+    }
+
+    public Node[] findNodes(Find f) {
+
+        return findNodesImplementation(f, this);
+    }
+
+    private Node[] findNodesImplementation(Find f, Node node) {
+        Node[] nodes = new Node[0];
+        if (f.find(node)) {
+            nodes = new Node[1];
+            nodes[0] = node;
+        }
+        for (int i = 0; i < node.nodes.length; i++) {
+            if (node.nodes[i].size() > 0) {
+                nodes = juntarNodes(nodes, findNodesImplementation(f, node.nodes[i]));
+            } else {
+                if (f.find(node.nodes[i])) {
+                    nodes = redimensionarArray(nodes, nodes.length + 1);
+                    nodes[nodes.length - 1] = node.nodes[i];
+                }
+            }
+
+        }
+        return nodes;
+    }
+
+    private Node[] juntarNodes(Node[] n1, Node[] n2) {
+        int sizeNovoNode = n1.length + n2.length;
+        Node[] novoArrayNode = new Node[sizeNovoNode];
+        int i = 0;
+        for (Node n : n1) {
+            novoArrayNode[i] = n;
+            i++;
+        }
+        for (Node n : n2) {
+            novoArrayNode[i] = n;
+            i++;
+        }
+        return novoArrayNode;
+    }
+
+    public int propriedadesSize() {
+        return tamanhoAtributo;
+    }
+
+    public boolean contains(Find f) {
+        for (int i = 0; i < nodes.length; i++) {
+            if (f.find(nodes[i])) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public int size() {
+        return tamanho;
+    }
+
+}
