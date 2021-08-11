@@ -5,6 +5,7 @@
  */
 package br.com.grupocampanha.xml;
 
+import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
@@ -18,7 +19,7 @@ import java.nio.file.Files;
  */
 public class XML {
 
-    public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException {
+    public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException {
         String xml = new String(Files.readAllBytes(arquivo.toPath())).replace("\n", "").replace("\t", "");
         Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
         xml = xml.substring(xml.indexOf('>') + 1);
@@ -28,7 +29,7 @@ public class XML {
         return nodePai;
     }
 
-    private static Node criarNode(String fragmento) {
+    private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException {
         String nome = "";
         Node node = null;
         boolean primeiraLetra = false;
@@ -90,7 +91,7 @@ public class XML {
         return node;
     }
 
-    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException  {
+    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException  {
         if (!fragmento.equals("")) {
             String nodeString = "";
             int indexAbridor = fragmento.indexOf('<');
