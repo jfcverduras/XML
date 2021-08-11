@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class teste {
     public static void main(String[] args) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException{
-    Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\test.xml"));
+    Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\config.xml"));
 
         System.out.println(tete);
      

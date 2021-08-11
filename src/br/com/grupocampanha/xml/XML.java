@@ -9,6 +9,7 @@ import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
+import br.com.grupocampanha.xml.exceptions.NodeIndexOfBoundsException;
 import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
 import java.io.File;
 import java.io.IOException;
@@ -21,15 +22,25 @@ import java.nio.file.Files;
 public class XML {
 
     public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
-        String xml = new String(Files.readAllBytes(arquivo.toPath())).replace("\n", "").replace("\t", "").replace("\r", "");
+        String xml = removerEscapes(new String(Files.readAllBytes(arquivo.toPath())));
         Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
-        xml = xml.substring(xml.indexOf('>') + 1);
-       
-      
+        if(nodePai.getNome().toLowerCase().equals("?xml")){
+            xml = xml.substring(xml.indexOf('>') + 1);
+        }else{
+        nodePai = new Node("");
+        }
+  
     if(!subNode(xml, nodePai).equals("")){
    throw new UnformattedXmlException();
    }
-        return nodePai;
+    if(nodePai.getNome().equals("")){
+        try{
+        return nodePai.nodeAt(0);
+        }catch (NodeIndexOfBoundsException e){
+            e.printStackTrace();
+        }
+    }
+    return nodePai;
     }
 
     private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
@@ -123,6 +134,7 @@ public class XML {
                     fragmento = subNode(fragmento, tempNode);
                     nomeProximoNode = fragmento.substring(fragmento.indexOf("<") + 1, fragmento.indexOf(">")).replace("/", "").trim();
                 }
+           
                 fragmento = fragmento.substring(fragmento.indexOf(">") + 1);
             } else {
                 return fragmento;
@@ -148,5 +160,15 @@ public class XML {
             return true;
         }
         return false;
+    }
+    
+    private static String removerEscapes(String string){
+    String novaString = string;
+    novaString = novaString.replace("\t", "");
+    novaString = novaString.replace("\b", "");
+    novaString = novaString.replace("\n", "");
+    novaString = novaString.replace("\r", "");
+    novaString = novaString.replace("\f", "");
+    return novaString; 
     }
 }
