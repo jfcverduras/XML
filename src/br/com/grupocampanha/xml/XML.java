@@ -81,7 +81,6 @@ public class XML {
                     primeiraAspa = false;
                     nomeFinalizado = false;
                 } else if (valor && primeiraAspa) {
-
                     valorPropriedade = valorPropriedade + Character.toString(c);
                 }
             }

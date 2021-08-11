@@ -1,7 +1,11 @@
 package br.com.grupocampanha.xml;
 
+import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
+import br.com.grupocampanha.xml.exceptions.NodeIndexOfBoundsException;
+import br.com.grupocampanha.xml.exceptions.NonExistentNodeException;
+import br.com.grupocampanha.xml.exceptions.ProprietyNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import br.com.grupocampanha.xml.interfaces.Find;
@@ -27,7 +31,7 @@ public class Node {
         this.nome = nome;
     }
 
-    public void adicionarNode(Node node) throws InsertNodeException   {
+    public void adicionarNode(Node node) throws InsertNodeException {
         if (valor != null) {
             throw new InsertNodeException();
         }
@@ -36,29 +40,34 @@ public class Node {
         tamanho++;
     }
 
-    public boolean removerNode(Node node) {
-        tamanho--;
+    public void removerNode(Node node) throws NonExistentNodeException {
+
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i].equals(node)) {
                 for (int k = i; k < nodes.length - 1; i++) {
                     nodes[i] = nodes[i + 1];
                 }
                 nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
-                return true;
+                tamanho--;
+
             }
         }
-        return false;
+        throw new NonExistentNodeException();
     }
 
-    public void removerNode(int index) {
-        tamanho--;
+    public void removerNode(int index) throws NodeIndexOfBoundsException {
+        if (index > nodes.length - 1 || index < 0) {
+            throw new NodeIndexOfBoundsException();
+        }
+
         for (int i = index; i < nodes.length - 1; i++) {
             nodes[i] = nodes[i + 1];
         }
         nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
+        tamanho--;
     }
 
-    public void setValor(String valor) throws InsertNodeValueException  {
+    public void setValor(String valor) throws InsertNodeValueException {
         if (nodes.length > 0) {
             throw new InsertNodeValueException();
         }
@@ -77,16 +86,39 @@ public class Node {
         return (String) propriedades.values().toArray()[index];
     }
 
-    public Node nodeAt(int index) {
-        return nodes[index];
+    public Node nodeAt(int index) throws NodeIndexOfBoundsException {
+        try {
+            return nodes[index];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new NodeIndexOfBoundsException();
+        }
     }
 
-    public void adicionarPropriedade(String propriedade, String Valor) {
+    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException, IllegalNodePropetyNameException {
+        if (Utilitario.contemCaracterEspecial(propriedade)) {
+            throw new IllegalNodePropetyNameException();
+        }
+        if (Utilitario.contemCaracterEspecial(Valor, true,'"')) {
+            throw new IllegalNodePropetyNameException();
+        }
+
         this.propriedades.put(propriedade, Valor);
         tamanhoAtributo++;
     }
 
-    public void removerPropriedade(String propriedade) {
+    public void removerPropriedade(String propriedade) throws ProprietyNotFoundException {
+        Object[] keys = this.propriedades.keySet().toArray();
+
+        boolean existe = false;
+        for (Object o : keys) {
+            if (((String) o).equals(propriedade)) {
+                existe = true;
+            }
+        }
+        if (!existe) {
+            throw new ProprietyNotFoundException();
+        }
+
         this.propriedades.remove(propriedade);
         tamanhoAtributo--;
     }
@@ -200,4 +232,31 @@ public class Node {
         return tamanho;
     }
 
+}
+
+class Utilitario {
+
+    public static boolean contemCaracterEspecial(String string) {
+        for (char c : string.toCharArray()) {
+            if (!Character.isLetter(c) && !Character.isDigit(c)) {
+                return true;
+
+            }
+
+        }
+        return false;
+    }
+
+    public static boolean contemCaracterEspecial(String string, boolean permirtir, char... caracter) {
+        for (char c : string.toCharArray()) {
+            if (!Character.isLetter(c) && !Character.isDigit(c)) {
+                for (char i : caracter) {
+                    if (i == c && !permirtir) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

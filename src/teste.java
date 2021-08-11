@@ -22,5 +22,6 @@ public class teste {
     Node tete = XML.parse(new File("C:\\Users\\jfc\\Desktop\\aaaaaa\\Config.xml"));
     Node[]  nodes= tete.findNodes(n -> n.getPropriedade("animal") != null);
         System.out.println(nodes);
+     
     }
 }
