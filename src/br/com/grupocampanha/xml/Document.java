@@ -27,12 +27,11 @@ public class Document extends File {
         }
     }
 
-    public void write(Document documento) throws IOException {
+    public void write(File file) throws IOException {
         BufferedWriter writer = null;
-        writer = new BufferedWriter(new FileWriter(documento));
-        writer.write(documento.node.toString());
+        writer = new BufferedWriter(new FileWriter(file));
+        writer.write(this.node.toString());
         writer.close();
-
     }
 
 }
