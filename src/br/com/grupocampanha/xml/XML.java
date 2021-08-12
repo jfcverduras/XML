@@ -135,14 +135,11 @@ public class XML {
                 } catch (StringIndexOutOfBoundsException e) {
                     return fragmento;
                 }
-
                 fragmento = fragmento.substring(fragmento.indexOf(">") + 1);
-            } else {
-                return fragmento;
-            }
-
-            return fragmento;
-
+            } 
+        }
+        if(fragmento.replace(" ", "").replace(" ", "").equals("")){
+            fragmento = "";
         }
         return fragmento;
     }
