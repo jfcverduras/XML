@@ -133,13 +133,17 @@ public class Node {
     }
 
     @Override
-    public String toString() {
+   public String toString(){
+   return toStringImplementation(1);
+   
+   }
+    public String toStringImplementation(int tabulacao) {
         StringBuilder sb = new StringBuilder();
         sb.append("<" + nome);
         if (propriedades != null) {
             Object[] chaves = propriedades.keySet().toArray();
             Object[] valores = propriedades.values().toArray();
-            for (int i = 0; i < chaves.length; i++) {
+            for (int i = chaves.length -1; i >= 0; i--) {
                 if (((String) valores[i]).contains("\"")) {
                     sb.append(" " + chaves[i] + "='" + valores[i] + "'");
                 } else {
@@ -152,19 +156,37 @@ public class Node {
             sb.append("/>");
             return sb.toString();
         }
+        if(nome.toLowerCase().equals("?xml")){
+        sb.append("?>");
+        }else{
         sb.append(">");
+        }
+        
         if (valor != null) {
             sb.append(valor);
+             if(!nome.toLowerCase().equals("?xml")){
+        sb.append("</" + nome + ">");
         }
-
+        }else{
+            
         for (int i = 0; i < nodes.length; i++) {
 
-            sb.append("" + nodes[i].toString());
+            sb.append("\n"+gerarTabulacao(tabulacao) + nodes[i].toStringImplementation(tabulacao +1));
         }
-        sb.append("</" + nome + ">");
+        
+         if(!nome.toLowerCase().equals("?xml")){
+        sb.append("\n"+gerarTabulacao(tabulacao-1) + "</" + nome + ">");
+        }
+        }
         return sb.toString();
     }
-
+private String gerarTabulacao(int qtd){
+    String tabulacao = "";
+for(int i =0 ; i< qtd;i++){
+    tabulacao = tabulacao + "   ";
+}
+return tabulacao;
+}
     public Node find(Find f) {
         for (int i = 0; i < nodes.length; i++) {
             if (f.find(nodes[i])) {

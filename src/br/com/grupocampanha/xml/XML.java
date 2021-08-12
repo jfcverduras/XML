@@ -23,6 +23,7 @@ public class XML {
 
     public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
         String xml = removerEscapes(new String(Files.readAllBytes(arquivo.toPath())));
+        
         Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
         if(nodePai.getNome().toLowerCase().equals("?xml")){
             xml = xml.substring(xml.indexOf('>') + 1);

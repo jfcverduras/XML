@@ -6,7 +6,9 @@ import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /*
@@ -21,9 +23,22 @@ import java.io.IOException;
  */
 public class teste {
     public static void main(String[] args) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException{
-    Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\config.xml"));
+    Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\teste.xml"));
 
-        System.out.println(tete);
-     
+          BufferedWriter writer = null;
+        try {
+            //create a temporary file
+       
+            File logFile = new File("C:\\Users\\victor\\Desktop\\teste  2\\criado.txt");
+
+            // This will output the full path where the file will be written to...
+            System.out.println(logFile.getCanonicalPath());
+String a = tete.toString();
+            writer = new BufferedWriter(new FileWriter(logFile));
+            writer.write(a);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+       writer.close();
     }
-}
+    }
