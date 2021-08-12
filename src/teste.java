@@ -1,6 +1,8 @@
 
+import br.com.grupocampanha.xml.Document;
 import br.com.grupocampanha.xml.Node;
 import br.com.grupocampanha.xml.XML;
+import br.com.grupocampanha.xml.exceptions.IllegalFileException;
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
@@ -22,23 +24,13 @@ import java.io.IOException;
  * @author jfc
  */
 public class teste {
-    public static void main(String[] args) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException{
-    Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\teste.xml"));
-    Node  temp = tete.findNodes(n -> n.getPropriedade("Id") != null && n.getPropriedade("Id").equals("Rps18309"))[0];
-          BufferedWriter writer = null;
-        try {
-            //create a temporary file
-       
-            File logFile = new File("C:\\Users\\victor\\Desktop\\teste  2\\criado.txt");
-
-            // This will output the full path where the file will be written to...
-            System.out.println(logFile.getCanonicalPath());
-String a = tete.toString();
-            writer = new BufferedWriter(new FileWriter(logFile));
-            writer.write(a);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-       writer.close();
+    public static void main(String[] args) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException, IllegalFileException{
+    Document teste = XML.parse(new File("C:\\Users\\jfc\\Desktop\\aaaaaa\\teste123.xml"));
+       // System.out.println(teste.node);
+ //   teste.node.adicionarNode(new Node("animal"){{ setValor("egua");}});
+   //Node aa =  teste.node.find(f -> f.getNome() != null && f.getNome().equals("UrlSankha"));
+   Document teste2 = new Document("C:\\Users\\jfc\\Desktop\\aaaaaa\\tete345.xml");
+   teste2.node =  teste.node;
+   teste.write(teste2);
     }
-    }
+}

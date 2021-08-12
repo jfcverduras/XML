@@ -5,6 +5,7 @@
  */
 package br.com.grupocampanha.xml;
 
+import br.com.grupocampanha.xml.exceptions.IllegalFileException;
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
 import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
@@ -21,30 +22,25 @@ import java.nio.file.Files;
  */
 public class XML {
 
-    public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
+    public static Document parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException,  IllegalFileException {
         String xml = removerEscapes(new String(Files.readAllBytes(arquivo.toPath())));
+        Document documento = new Document(arquivo.getAbsolutePath());
 
-        Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
-        if (nodePai.getNome().toLowerCase().equals("?xml")) {
-            xml = xml.substring(xml.indexOf('>') + 1);
-        } else {
-            nodePai = new Node("");
-        }
+        Node nodePai = nodePai = new Node("");
 
         if (!subNode(xml, nodePai).equals("")) {
             throw new UnformattedXmlException();
         }
-        if (nodePai.getNome().equals("")) {
-            try {
-                return nodePai.nodeAt(0);
-            } catch (NodeIndexOfBoundsException e) {
-                e.printStackTrace();
-            }
+        try {
+            documento.node = nodePai.nodeAt(0);
+        } catch (NodeIndexOfBoundsException e) {
+            e.printStackTrace();
         }
-        return nodePai;
+
+        return documento;
     }
 
-    private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
+    private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException {
         String nome = "";
         Node node = null;
         boolean primeiraLetra = false;
@@ -106,7 +102,7 @@ public class XML {
         return node;
     }
 
-    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
+    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException {
         if (!fragmento.equals("")) {
             String nodeString = "";
             int indexAbridor = fragmento.indexOf('<');
@@ -130,10 +126,14 @@ public class XML {
                 }
 
                 String nomeProximoNode = fragmento.substring(fragmento.indexOf("<") + 1, fragmento.indexOf(">")).replace("/", "").trim();
-                while (!nomeProximoNode.equals(tempNode.getNome())) {
+                try {
+                    while (!nomeProximoNode.equals(tempNode.getNome())) {
 
-                    fragmento = subNode(fragmento, tempNode);
-                    nomeProximoNode = fragmento.substring(fragmento.indexOf("<") + 1, fragmento.indexOf(">")).replace("/", "").trim();
+                        fragmento = subNode(fragmento, tempNode);
+                        nomeProximoNode = fragmento.substring(fragmento.indexOf("<") + 1, fragmento.indexOf(">")).replace("/", "").trim();
+                    }
+                } catch (StringIndexOutOfBoundsException e) {
+                    return fragmento;
                 }
 
                 fragmento = fragmento.substring(fragmento.indexOf(">") + 1);

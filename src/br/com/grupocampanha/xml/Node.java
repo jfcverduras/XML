@@ -184,14 +184,27 @@ for(int i =0 ; i< qtd;i++){
 }
 return tabulacao;
 }
-    public Node find(Find f) {
-        for (int i = 0; i < nodes.length; i++) {
-            if (f.find(nodes[i])) {
-                return nodes[i];
-            }
-        }
-        return null;
 
+ public Node find(Find f){
+  return findImplementation(f,this);
+ }
+    public Node findImplementation(Find f, Node node)  {
+
+        if (f.find(node)) {
+         return node;
+        }
+
+        for (int i = 0; i < node.nodes.length; i++) {
+            if (node.nodes[i].size() > 0) {
+                node =  findImplementation(f, node.nodes[i]);
+            } else {
+                if (f.find(node.nodes[i])) {
+                    return node.nodes[i];
+                }
+            }
+
+        }
+        return node;
     }
 
     public Node[] findNodes(Find f) {
