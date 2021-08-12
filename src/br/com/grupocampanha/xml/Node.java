@@ -188,7 +188,7 @@ return tabulacao;
  public Node find(Find f){
   return findImplementation(f,this);
  }
-    public Node findImplementation(Find f, Node node)  {
+    private Node findImplementation(Find f, Node node)  {
 
         if (f.find(node)) {
          return node;
