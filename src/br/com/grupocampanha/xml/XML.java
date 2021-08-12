@@ -23,25 +23,25 @@ public class XML {
 
     public static Node parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
         String xml = removerEscapes(new String(Files.readAllBytes(arquivo.toPath())));
-        
+
         Node nodePai = criarNode(xml.substring(0, xml.indexOf('>')));
-        if(nodePai.getNome().toLowerCase().equals("?xml")){
+        if (nodePai.getNome().toLowerCase().equals("?xml")) {
             xml = xml.substring(xml.indexOf('>') + 1);
-        }else{
-        nodePai = new Node("");
+        } else {
+            nodePai = new Node("");
         }
-  
-    if(!subNode(xml, nodePai).equals("")){
-   throw new UnformattedXmlException();
-   }
-    if(nodePai.getNome().equals("")){
-        try{
-        return nodePai.nodeAt(0);
-        }catch (NodeIndexOfBoundsException e){
-            e.printStackTrace();
+
+        if (!subNode(xml, nodePai).equals("")) {
+            throw new UnformattedXmlException();
         }
-    }
-    return nodePai;
+        if (nodePai.getNome().equals("")) {
+            try {
+                return nodePai.nodeAt(0);
+            } catch (NodeIndexOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+        return nodePai;
     }
 
     private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
@@ -106,7 +106,7 @@ public class XML {
         return node;
     }
 
-    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, IllegalNodePropetyValueException  {
+    private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, IllegalNodePropetyValueException {
         if (!fragmento.equals("")) {
             String nodeString = "";
             int indexAbridor = fragmento.indexOf('<');
@@ -135,7 +135,7 @@ public class XML {
                     fragmento = subNode(fragmento, tempNode);
                     nomeProximoNode = fragmento.substring(fragmento.indexOf("<") + 1, fragmento.indexOf(">")).replace("/", "").trim();
                 }
-           
+
                 fragmento = fragmento.substring(fragmento.indexOf(">") + 1);
             } else {
                 return fragmento;
@@ -162,14 +162,14 @@ public class XML {
         }
         return false;
     }
-    
-    private static String removerEscapes(String string){
-    String novaString = string;
-    novaString = novaString.replace("\t", "");
-    novaString = novaString.replace("\b", "");
-    novaString = novaString.replace("\n", "");
-    novaString = novaString.replace("\r", "");
-    novaString = novaString.replace("\f", "");
-    return novaString; 
+
+    private static String removerEscapes(String string) {
+        String novaString = string;
+        novaString = novaString.replace("\t", "");
+        novaString = novaString.replace("\b", "");
+        novaString = novaString.replace("\n", "");
+        novaString = novaString.replace("\r", "");
+        novaString = novaString.replace("\f", "");
+        return novaString;
     }
 }

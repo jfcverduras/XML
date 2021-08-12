@@ -24,7 +24,7 @@ import java.io.IOException;
 public class teste {
     public static void main(String[] args) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalNodePropetyValueException{
     Node tete = XML.parse(new File("C:\\Users\\victor\\Desktop\\teste  2\\teste.xml"));
-
+    Node  temp = tete.findNodes(n -> n.getPropriedade("Id") != null && n.getPropriedade("Id").equals("Rps18309"))[0];
           BufferedWriter writer = null;
         try {
             //create a temporary file

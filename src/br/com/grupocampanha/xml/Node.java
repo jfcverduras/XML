@@ -95,14 +95,11 @@ public class Node {
         }
     }
 
-    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException, IllegalNodePropetyValueException {
+    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException  {
         if (Utilitario.contemCaracterEspecial(propriedade)) {
             throw new IllegalNodePropetyNameException();
         }
-        if (Utilitario.contemCaracterEspecial(Valor, true,'"')) {
-            throw new IllegalNodePropetyValueException();
-        }
-
+   
         this.propriedades.put(propriedade, Valor);
         tamanhoAtributo++;
     }
@@ -204,13 +201,15 @@ return tabulacao;
 
     private Node[] findNodesImplementation(Find f, Node node) {
         Node[] nodes = new Node[0];
+
         if (f.find(node)) {
             nodes = new Node[1];
             nodes[0] = node;
         }
+
         for (int i = 0; i < node.nodes.length; i++) {
             if (node.nodes[i].size() > 0) {
-                nodes = juntarNodes(nodes, findNodesImplementation(f, node.nodes[i]));
+                nodes = Utilitario.juntarNodes(nodes, findNodesImplementation(f, node.nodes[i]));
             } else {
                 if (f.find(node.nodes[i])) {
                     nodes = redimensionarArray(nodes, nodes.length + 1);
@@ -222,20 +221,7 @@ return tabulacao;
         return nodes;
     }
 
-    private Node[] juntarNodes(Node[] n1, Node[] n2) {
-        int sizeNovoNode = n1.length + n2.length;
-        Node[] novoArrayNode = new Node[sizeNovoNode];
-        int i = 0;
-        for (Node n : n1) {
-            novoArrayNode[i] = n;
-            i++;
-        }
-        for (Node n : n2) {
-            novoArrayNode[i] = n;
-            i++;
-        }
-        return novoArrayNode;
-    }
+    
 
     public int propriedadesSize() {
         return tamanhoAtributo;
@@ -281,5 +267,19 @@ class Utilitario {
             }
         }
         return false;
+    }
+    public static Node[] juntarNodes(Node[] n1, Node[] n2) {
+        int sizeNovoNode = n1.length + n2.length;
+        Node[] novoArrayNode = new Node[sizeNovoNode];
+        int i = 0;
+        for (Node n : n1) {
+            novoArrayNode[i] = n;
+            i++;
+        }
+        for (Node n : n2) {
+            novoArrayNode[i] = n;
+            i++;
+        }
+        return novoArrayNode;
     }
 }
