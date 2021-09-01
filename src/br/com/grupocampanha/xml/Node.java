@@ -95,11 +95,11 @@ public class Node {
         }
     }
 
-    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException  {
+    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException {
         if (Utilitario.contemCaracterEspecial(propriedade)) {
             throw new IllegalNodePropetyNameException();
         }
-   
+
         this.propriedades.put(propriedade, Valor);
         tamanhoAtributo++;
     }
@@ -130,17 +130,18 @@ public class Node {
     }
 
     @Override
-   public String toString(){
-   return toStringImplementation(1);
-   
-   }
+    public String toString() {
+        return toStringImplementation(1);
+
+    }
+
     public String toStringImplementation(int tabulacao) {
         StringBuilder sb = new StringBuilder();
         sb.append("<" + nome);
         if (propriedades != null) {
             Object[] chaves = propriedades.keySet().toArray();
             Object[] valores = propriedades.values().toArray();
-            for (int i = chaves.length -1; i >= 0; i--) {
+            for (int i = chaves.length - 1; i >= 0; i--) {
                 if (((String) valores[i]).contains("\"")) {
                     sb.append(" " + chaves[i] + "='" + valores[i] + "'");
                 } else {
@@ -153,50 +154,56 @@ public class Node {
             sb.append("/>");
             return sb.toString();
         }
-        if(nome.toLowerCase().equals("?xml")){
-        sb.append("?>");
-        }else{
-        sb.append(">");
+        if (nome.toLowerCase().equals("?xml")) {
+            sb.append("?>");
+        } else {
+            sb.append(">");
         }
-        
+
         if (valor != null) {
             sb.append(valor);
-             if(!nome.toLowerCase().equals("?xml")){
-        sb.append("</" + nome + ">");
-        }
-        }else{
-            
-        for (int i = 0; i < nodes.length; i++) {
+            if (!nome.toLowerCase().equals("?xml")) {
+                sb.append("</" + nome + ">");
+            }
+        } else {
 
-            sb.append("\n"+gerarTabulacao(tabulacao) + nodes[i].toStringImplementation(tabulacao +1));
-        }
-        
-         if(!nome.toLowerCase().equals("?xml")){
-        sb.append("\n"+gerarTabulacao(tabulacao-1) + "</" + nome + ">");
-        }
+            for (int i = 0; i < nodes.length; i++) {
+
+                sb.append("\n" + gerarTabulacao(tabulacao) + nodes[i].toStringImplementation(tabulacao + 1));
+            }
+
+            if (!nome.toLowerCase().equals("?xml")) {
+                sb.append("\n" + gerarTabulacao(tabulacao - 1) + "</" + nome + ">");
+            }
         }
         return sb.toString();
     }
-private String gerarTabulacao(int qtd){
-    String tabulacao = "";
-for(int i =0 ; i< qtd;i++){
-    tabulacao = tabulacao + "   ";
-}
-return tabulacao;
-}
 
- public Node find(Find f){
-  return findImplementation(f,this);
- }
-    private Node findImplementation(Find f, Node node)  {
+    private String gerarTabulacao(int qtd) {
+        String tabulacao = "";
+        for (int i = 0; i < qtd; i++) {
+            tabulacao = tabulacao + "   ";
+        }
+        return tabulacao;
+    }
+
+    public Node find(Find f) {
+        Node result = findImplementation(f, this);
+        if (f.find(result)) {
+            return result;
+        }
+        return null;
+    }
+
+    private Node findImplementation(Find f, Node node) {
 
         if (f.find(node)) {
-         return node;
+            return node;
         }
 
         for (int i = 0; i < node.nodes.length; i++) {
             if (node.nodes[i].size() > 0) {
-                node =  findImplementation(f, node.nodes[i]);
+                node = findImplementation(f, node.nodes[i]);
             } else {
                 if (f.find(node.nodes[i])) {
                     return node.nodes[i];
@@ -204,7 +211,7 @@ return tabulacao;
             }
 
         }
-        return null;
+        return node;
     }
 
     public Node[] findNodes(Find f) {
@@ -233,8 +240,6 @@ return tabulacao;
         }
         return nodes;
     }
-
-    
 
     public int propriedadesSize() {
         return tamanhoAtributo;
@@ -281,6 +286,7 @@ class Utilitario {
         }
         return false;
     }
+
     public static Node[] juntarNodes(Node[] n1, Node[] n2) {
         int sizeNovoNode = n1.length + n2.length;
         Node[] novoArrayNode = new Node[sizeNovoNode];
