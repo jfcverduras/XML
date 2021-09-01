@@ -204,7 +204,7 @@ return tabulacao;
             }
 
         }
-        return node;
+        return null;
     }
 
     public Node[] findNodes(Find f) {

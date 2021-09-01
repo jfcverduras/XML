@@ -15,6 +15,14 @@ import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  *
@@ -39,7 +47,15 @@ public class XML {
 
         return documento;
     }
-
+ public static Document parse (org.w3c.dom.Document doc) throws TransformerConfigurationException, TransformerException, IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalFileException{
+  TransformerFactory tranFactory = TransformerFactory.newInstance();
+        Transformer aTransformer = tranFactory.newTransformer();
+        Source src = new DOMSource(doc);
+        File file = new File("xml.xml");
+        Result dest = new StreamResult(file);
+        aTransformer.transform(src, dest);
+       return  XML.parse(file);
+ }
     private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException {
         String nome = "";
         Node node = null;
