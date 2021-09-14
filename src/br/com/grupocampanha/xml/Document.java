@@ -22,9 +22,6 @@ public class Document extends File {
 
     public Document(String caminho) throws IllegalFileException {
         super(caminho);
-        if (!super.getName().toLowerCase().endsWith(".xml")) {
-            throw new IllegalFileException();
-        }
     }
 
     public void write(File file) throws IOException {
