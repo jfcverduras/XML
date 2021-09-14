@@ -95,11 +95,7 @@ public class Node {
         }
     }
 
-    public void adicionarPropriedade(String propriedade, String Valor) throws IllegalNodePropetyNameException {
-        if (Utilitario.contemCaracterEspecial(propriedade)) {
-            throw new IllegalNodePropetyNameException();
-        }
-
+    public void adicionarPropriedade(String propriedade, String Valor) {
         this.propriedades.put(propriedade, Valor);
         tamanhoAtributo++;
     }
@@ -135,7 +131,7 @@ public class Node {
 
     }
 
-    public String toStringImplementation(int tabulacao) {
+    private String toStringImplementation(int tabulacao) {
         StringBuilder sb = new StringBuilder();
         sb.append("<" + nome);
         if (propriedades != null) {
