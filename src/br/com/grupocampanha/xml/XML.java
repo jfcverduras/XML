@@ -107,7 +107,7 @@ public class XML {
       int indexAbridor = fragmento.indexOf('<');
       int indexFechador = fragmento.indexOf('>');
       nodeString = fragmento.substring(indexAbridor, indexFechador + 1);
-      fragmento = fragmento.substring(indexFechador + 1);
+      fragmento = fragmento.substring(indexFechador + 1).trim();
       if (!nodeFechamento(nodeString)) {
         Node tempNode = criarNode(nodeString);
         node.adicionarNode(tempNode);
