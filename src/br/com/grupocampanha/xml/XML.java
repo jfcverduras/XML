@@ -111,9 +111,15 @@ public class XML {
       if (!nodeFechamento(nodeString)) {
         Node tempNode = criarNode(nodeString);
         node.adicionarNode(tempNode);
+        //ignora comentarios
+        while(fragmento.length() >4 &&fragmento.startsWith("<!--")){
+        fragmento = fragmento.substring(fragmento.indexOf(">")+1);
+        }
+        
         int indexAbertura = fragmento.indexOf("<");
         int indexFechamento = fragmento.indexOf(">");
         String inicioNode = fragmento.substring(0, 2);
+       
         while (inicioNode.equals("<!")) {
           indexAbertura = indexAbertura + 1 + fragmento.substring(indexAbertura + 1).indexOf('<');
           indexFechamento = indexFechamento + 1 + fragmento.substring(indexFechamento + 1).indexOf('>');
