@@ -33,7 +33,7 @@ public class XML {
 		return documento;
 	}
 
-	public static Document parser(String xml) throws IllegalFileException, InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, UnformattedXmlException {
+	public static Document parse(String xml) throws IllegalFileException, InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, UnformattedXmlException {
 		xml = removerEscapes(xml);
 		Document documento = new Document("xml.xml");
 		Node nodePai = new Node("");

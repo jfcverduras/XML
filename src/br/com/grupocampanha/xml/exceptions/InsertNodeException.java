@@ -13,5 +13,4 @@ public class InsertNodeException  extends Exception{
   public InsertNodeException(){ 
       super("Não é possivel adicionar um node em um node de valor");
   } 
-    
 }
