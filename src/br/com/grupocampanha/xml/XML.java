@@ -1,10 +1,9 @@
 package br.com.grupocampanha.xml;
 
-import br.com.grupocampanha.xml.exceptions.IllegalFileException;
-import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
+
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
-import br.com.grupocampanha.xml.exceptions.NodeIndexOfBoundsException;
+
 import br.com.grupocampanha.xml.exceptions.UnformattedXmlException;
 import java.io.File;
 import java.io.IOException;
@@ -19,36 +18,32 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 public class XML {
-	public static Document parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalFileException {
+	public static Document parse(File arquivo) throws IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException {
 		String xml = removerEscapes(new String(Files.readAllBytes(arquivo.toPath())));
 		Document documento = new Document(arquivo.getAbsolutePath());
 		Node nodePai = new Node("");
 		if (!subNode(xml, nodePai).equals(""))
 			throw new UnformattedXmlException(); 
-		try {
+	
 			documento.node = nodePai.nodeAt(0);
-		} catch (NodeIndexOfBoundsException e) {
-			e.printStackTrace();
-		} 
+
 		return documento;
 	}
 
-	public static Document parse(String xml) throws IllegalFileException, InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException, UnformattedXmlException {
+	public static Document parse(String xml) throws  InsertNodeException, InsertNodeValueException, UnformattedXmlException {
 		xml = removerEscapes(xml);
 		Document documento = new Document("xml.xml");
 		Node nodePai = new Node("");
 		if (!subNode(xml, nodePai).equals(""))
 			throw new UnformattedXmlException(); 
-		try {
+
 			documento.node = nodePai.nodeAt(0);
-		} catch (NodeIndexOfBoundsException e) {
-			e.printStackTrace();
-		} 
+	
 		return documento;
 
 	}
 
-	public static Document parse(org.w3c.dom.Document doc) throws TransformerConfigurationException, TransformerException, IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException, IllegalNodePropetyNameException, IllegalFileException {
+	public static Document parse(org.w3c.dom.Document doc) throws TransformerConfigurationException, TransformerException, IOException, InsertNodeException, InsertNodeValueException, UnformattedXmlException {
 		TransformerFactory tranFactory = TransformerFactory.newInstance();
 		Transformer aTransformer = tranFactory.newTransformer();
 		Source src = new DOMSource(doc);
@@ -58,7 +53,7 @@ public class XML {
 		return parse(file);
 	}
 
-	private static Node criarNode(String fragmento) throws IllegalNodePropetyNameException {
+	private static Node criarNode(String fragmento)  {
 		String nome = "";
 		Node node = null;
 		boolean primeiraLetra = false;
@@ -116,7 +111,7 @@ public class XML {
 		return node;
 	}
 
-	private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException, IllegalNodePropetyNameException {
+	private static String subNode(String fragmento, Node node) throws InsertNodeException, InsertNodeValueException {
 		if (!fragmento.equals("")) {
 			String nodeString = "";
 			int indexAbridor = fragmento.indexOf('<');

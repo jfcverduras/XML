@@ -1,12 +1,8 @@
 package br.com.grupocampanha.xml;
 
-import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyNameException;
-import br.com.grupocampanha.xml.exceptions.IllegalNodePropetyValueException;
+
 import br.com.grupocampanha.xml.exceptions.InsertNodeException;
 import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
-import br.com.grupocampanha.xml.exceptions.NodeIndexOfBoundsException;
-import br.com.grupocampanha.xml.exceptions.NonExistentNodeException;
-import br.com.grupocampanha.xml.exceptions.ProprietyNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import br.com.grupocampanha.xml.interfaces.Find;
@@ -41,24 +37,24 @@ public class Node {
         tamanho++;
     }
 
-    public void removerNode(Node node) throws NonExistentNodeException {
+    public boolean removerNode(Node node){
 
         for (int i = 0; i < nodes.length; i++) {
             if (nodes[i].equals(node)) {
-                for (int k = i; k < nodes.length - 1; i++) {
-                    nodes[i] = nodes[i + 1];
+                for (int k = i; k < nodes.length - 1; k++) {
+                    nodes[k] = nodes[k + 1];
                 }
                 nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
                 tamanho--;
-
+                return true;
             }
         }
-        throw new NonExistentNodeException();
+       return false;
     }
 
-    public void removerNode(int index) throws NodeIndexOfBoundsException {
+    public boolean removerNode(int index){
         if (index > nodes.length - 1 || index < 0) {
-            throw new NodeIndexOfBoundsException();
+         return false;
         }
 
         for (int i = index; i < nodes.length - 1; i++) {
@@ -66,6 +62,7 @@ public class Node {
         }
         nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
         tamanho--;
+        return true;
     }
 
     public void setValor(String valor) throws InsertNodeValueException {
@@ -87,12 +84,8 @@ public class Node {
         return (String) propriedades.values().toArray()[index];
     }
 
-    public Node nodeAt(int index) throws NodeIndexOfBoundsException {
-        try {
+    public Node nodeAt(int index)   {
             return nodes[index];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new NodeIndexOfBoundsException();
-        }
     }
 
     public void adicionarPropriedade(String propriedade, String Valor) {
@@ -100,7 +93,7 @@ public class Node {
         tamanhoAtributo++;
     }
 
-    public void removerPropriedade(String propriedade) throws ProprietyNotFoundException {
+    public boolean removerPropriedade(String propriedade) {
         Object[] keys = this.propriedades.keySet().toArray();
 
         boolean existe = false;
@@ -109,17 +102,14 @@ public class Node {
                 existe = true;
             }
         }
-        if (!existe) {
-            throw new ProprietyNotFoundException();
-        }
-
         this.propriedades.remove(propriedade);
         tamanhoAtributo--;
+        return existe;
     }
 
     private Node[] redimensionarArray(Node[] array, int novoTamanho) {
         Node[] novoArray = new Node[novoTamanho];
-        for (int i = 0; i < (novoTamanho <= 0 ? novoArray.length : array.length); i++) {
+        for (int i = 0; i < (novoTamanho > array.length ? array.length : novoTamanho   ); i++) {
             novoArray[i] = array[i];
         }
         return novoArray;
@@ -198,16 +188,11 @@ public class Node {
         }
 
         for (int i = 0; i < node.nodes.length; i++) {
-            if (node.nodes[i].size() > 0) {
-                node = findImplementation(f, node.nodes[i]);
-            } else {
-                if (f.find(node.nodes[i])) {
-                    return node.nodes[i];
-                }
-            }
-
+        	Node n = findImplementation(f, node.nodes[i]);
+        	if(n != null && f.find(n))
+        		return n;
         }
-        return node;
+        return null;
     }
 
     public Node[] findNodes(Find f) {
@@ -224,15 +209,7 @@ public class Node {
         }
 
         for (int i = 0; i < node.nodes.length; i++) {
-            if (node.nodes[i].size() > 0) {
                 nodes = Utilitario.juntarNodes(nodes, findNodesImplementation(f, node.nodes[i]));
-            } else {
-                if (f.find(node.nodes[i])) {
-                    nodes = redimensionarArray(nodes, nodes.length + 1);
-                    nodes[nodes.length - 1] = node.nodes[i];
-                }
-            }
-
         }
         return nodes;
     }

@@ -5,12 +5,12 @@
  */
 package br.com.grupocampanha.xml;
 
-import br.com.grupocampanha.xml.exceptions.IllegalFileException;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
+
 
 /**
  *
@@ -20,7 +20,7 @@ public class Document extends File {
 
     public Node node;
 
-    public Document(String caminho) throws IllegalFileException {
+    public Document(String caminho)  {
         super(caminho);
     }
 
