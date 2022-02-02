@@ -9,7 +9,7 @@ package br.com.grupocampanha.xml.exceptions;
  *
  * @author jfc
  */
-public class InsertNodeValueException extends Exception {
+public class InsertNodeValueException extends RuntimeException {
     public InsertNodeValueException(){
     super("Não e possivel adicionar um valor em um node contendo nodes");
     }

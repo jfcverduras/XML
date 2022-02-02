@@ -5,7 +5,9 @@ import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import java.util.HashMap;
 import java.util.Map;
 import br.com.grupocampanha.xml.interfaces.Find;
+import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Node {
 
@@ -31,10 +33,16 @@ public class Node {
 
     public Node add(Node node) {
         if (valor != null)
-            new InsertNodeException().printStackTrace();
+            throw new InsertNodeException();
         nodes = redimensionarArray(nodes, nodes.length + 1);
         nodes[nodes.length - 1] = node;
         tamanho++;
+        return this;
+    }
+
+    public Node remove() {
+        this.nodes = new Node[0];
+        this.valor = null;
         return this;
     }
 
@@ -64,7 +72,7 @@ public class Node {
 
     public Node add(String valor) {
         if (nodes.length > 0)
-            new InsertNodeValueException().printStackTrace();
+            throw new InsertNodeValueException();
         this.valor = valor;
         return this;
     }
@@ -72,12 +80,14 @@ public class Node {
     public String getValor() {
         return valor;
     }
-    public Node forEach(Consumer<Node> a){
-    for(Node n : nodes)
-        a.accept(n);
-    
-    return this;
+
+    public Node forEach(Consumer<Node> a) {
+        for (Node n : nodes)
+            a.accept(n);
+
+        return this;
     }
+
     public String getPropriedade(String propriedade) {
         return propriedades.get(propriedade);
     }
@@ -103,8 +113,8 @@ public class Node {
             String nomeNode;
 
             public PS(String path) {
-                path = path.substring(path.indexOf("/")+1);
-                initNextNode = path.indexOf("/")+1;
+                path = path.substring(path.indexOf("/") + 1);
+                initNextNode = path.indexOf("/") + 1;
                 String frag = path.substring(0, path.indexOf("/"));
                 nodePosition = nodeIndex(frag);
                 if (nodePosition == -1)
@@ -126,7 +136,7 @@ public class Node {
 
                 endIndex += qtdchar;
 
-                String numeros = frag.substring(initIndex+1, endIndex);
+                String numeros = frag.substring(initIndex + 1, endIndex);
                 if (!numeros.chars().allMatch(Character::isDigit))
                     return -1;
                 return Integer.parseInt(numeros);
@@ -134,22 +144,22 @@ public class Node {
 
         }
         PS ps = new PS(path);
-       Node[] nods = nodePrincipal.findAll(f->f.getNome().equals(ps.nomeNode));
-       Node node; 
-       if(nods.length >1)
-           if(ps.nodePosition == -1)
-               return null;
-           else
-               node  = nods[ps.nodePosition];
-       else if(nods.length == 0)
-           return null;
-       else
-           node = nods[0];
-           
-       if(!path.substring(ps.initNextNode+1).isEmpty())
-           return getByString(node, path.substring(ps.initNextNode));
-       else
-           return node;
+        Node[] nods = Arrays.asList(nodePrincipal.nodes).stream().filter(f -> f.getNome().equals(ps.nomeNode)).collect(Collectors.toList()).toArray(new Node[0]);
+        Node node;
+        if (nods.length > 1)
+            if (ps.nodePosition == -1)
+                return null;
+            else
+                node = nods[ps.nodePosition];
+        else if (nods.length == 0)
+            return null;
+        else
+            node = nods[0];
+
+        if (!path.substring(ps.initNextNode + 1).isEmpty())
+            return getByString(node, path.substring(ps.initNextNode));
+        else
+            return node;
     }
 
     public Node adicionarPropriedade(String propriedade, String Valor) {
@@ -206,9 +216,8 @@ public class Node {
                 sb.append("</" + nome + ">");
         } else {
 
-            for (int i = 0; i < nodes.length; i++)
-
-                sb.append("\n" + gerarTabulacao(tabulacao) + nodes[i].toStringImplementation(tabulacao + 1));
+            for (Node node : nodes)
+                sb.append("\n" + gerarTabulacao(tabulacao) + node.toStringImplementation(tabulacao + 1));
 
             if (!nome.toLowerCase().equals("?xml"))
                 sb.append("\n" + gerarTabulacao(tabulacao - 1) + "</" + nome + ">");
@@ -224,10 +233,7 @@ public class Node {
     }
 
     public Node find(Find f) {
-        Node result = findImplementation(f, this);
-        if (f.find(result))
-            return result;
-        return null;
+        return findImplementation(f, this);
     }
 
     private Node findImplementation(Find f, Node node) {
