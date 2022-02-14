@@ -40,13 +40,13 @@ public class Node {
         return this;
     }
 
-    public Node remove() {
+    public void remove() {
         this.nodes = new Node[0];
         this.valor = null;
-        return this;
+        
     }
 
-    public Node remove(Node node) {
+    public void remove(Node node) {
 
         for (int i = 0; i < nodes.length; i++)
             if (nodes[i].equals(node)) {
@@ -56,18 +56,17 @@ public class Node {
                 tamanho--;
                 break;
             }
-        return this;
+    
     }
 
-    public Node remove(int index) {
+    public void remove(int index) {
         if (index > nodes.length - 1 || index < 0)
-            return this;
+            return;
 
         for (int i = index; i < nodes.length - 1; i++)
             nodes[i] = nodes[i + 1];
         nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
         tamanho--;
-        return this;
     }
 
     public Node add(String valor) {
@@ -81,11 +80,10 @@ public class Node {
         return valor;
     }
 
-    public Node forEach(Consumer<Node> a) {
+    public void forEach(Consumer<Node> a) {
         for (Node n : nodes)
             a.accept(n);
 
-        return this;
     }
 
     public String getPropriedade(String propriedade) {
@@ -168,11 +166,11 @@ public class Node {
         return this;
     }
 
-    public Node removerPropriedade(String propriedade) {
+    public void removerPropriedade(String propriedade) {
 
         this.propriedades.remove(propriedade);
         tamanhoAtributo--;
-        return this;
+
     }
 
     private Node[] redimensionarArray(Node[] array, int novoTamanho) {
