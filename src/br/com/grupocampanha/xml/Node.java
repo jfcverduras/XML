@@ -5,10 +5,7 @@ import br.com.grupocampanha.xml.exceptions.InsertNodeValueException;
 import java.util.HashMap;
 import java.util.Map;
 import br.com.grupocampanha.xml.interfaces.Find;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -20,7 +17,6 @@ public class Node {
     private String nome;
     private int tamanho = 0;
     private int tamanhoAtributo = 0;
-    private List<String> comentarios = new ArrayList();
 
     public Node(String nome) {
         this.nome = nome;
@@ -47,7 +43,7 @@ public class Node {
     public void remove() {
         this.nodes = new Node[0];
         this.valor = null;
-
+        
     }
 
     public void remove(Node node) {
@@ -60,7 +56,7 @@ public class Node {
                 tamanho--;
                 break;
             }
-
+    
     }
 
     public void remove(int index) {
@@ -73,45 +69,11 @@ public class Node {
         tamanho--;
     }
 
-    public void removeAllPropeties() {
-        Set<String> keys = this.propriedades.keySet();
-        keys.forEach(f -> {
-            propriedades.remove(f);
-        });
-    }
-    protected void clonePropeties(Node node){
-        this.propriedades = node.propriedades;
-    }
-    
     public Node add(String valor) {
         if (nodes.length > 0)
             throw new InsertNodeValueException();
         this.valor = valor;
         return this;
-    }
-
-    public void addComentario(String comentario) {
-        this.comentarios.add(comentario);
-    }
-
-    public void removeComentario(int i) {
-        this.comentarios.remove(i);
-    }
-
-    public String getComentario(int i) {
-        return this.comentarios.get(i);
-    }
-
-    public void setComentario(String comentario, int index) {
-        this.comentarios.set(index, comentario);
-    }
-
-    public String[] getAllComentarios() {
-        return this.comentarios.toArray(new String[0]);
-    }
-
-    public void removeAllComentarios() {
-        this.comentarios.removeAll(comentarios);
     }
 
     public String getValor() {

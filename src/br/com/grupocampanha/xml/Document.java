@@ -16,18 +16,19 @@ import java.io.IOException;
  *
  * @author jfc
  */
-public class Document extends Node  {
+public class Document extends File {
 
-    public Document()  {
-        super("?xml");
+    public Node node;
+
+    public Document(String caminho)  {
+        super(caminho);
     }
 
-    public void writeTo(File file) throws IOException {
+    public void write(File file) throws IOException {
         BufferedWriter writer = null;
         writer = new BufferedWriter(new FileWriter(file));
-        writer.write(this.toString());
+        writer.write(this.node.toString());
         writer.close();
-      
     }
 
 }

@@ -9,17 +9,9 @@ package br.com.grupocampanha.xml.exceptions;
  *
  * @author jfc
  */
-public class UnformattedXmlException extends Exception {
-
-    public UnformattedXmlException() {
-        super("XML mal formatado");
-    }
-
-    public UnformattedXmlException(int index) {
-        super("XML mal formatado at index: " + index);
-    }
-    public UnformattedXmlException(String s) {
-        super("XML mal formatado: " + s);
+public class UnformattedXmlException extends Exception{
+    public UnformattedXmlException(){
+    super("XML mal formatado");
     }
     
 }
