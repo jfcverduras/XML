@@ -13,4 +13,7 @@ public class InsertNodeException  extends RuntimeException{
   public InsertNodeException(){ 
       super("Não é possivel adicionar um node em um node de valor");
   } 
+   public InsertNodeException(String s){ 
+      super(s);
+  } 
 }
