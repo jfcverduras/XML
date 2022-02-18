@@ -16,20 +16,20 @@ import java.io.IOException;
  */
 public class Document  {
 
-    protected XMLCab cab;
+    protected DocumentCab cab;
     private Node node;
     private String documentName;
     private File documentPath;
 
 
     public Document(String name) {
-        cab = new XMLCab("1.0");
+        cab = new DocumentCab("1.0");
         if (name == null || name.isEmpty())
             throw new RuntimeException("nome nao pode ser nulo nem vazido");
         this.documentName = name;
     }
 
-    public Document(String name, XMLCab cab) {
+    public Document(String name, DocumentCab cab) {
         if (name == null || name.isEmpty())
             throw new RuntimeException("nome nao pode ser nulo nem vazido");
         if (cab == null)
@@ -38,7 +38,7 @@ public class Document  {
         this.cab = cab;
     }
 
-    public XMLCab getCab() {
+    public DocumentCab getCab() {
         return this.cab;
     }
 

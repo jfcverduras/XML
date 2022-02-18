@@ -4,24 +4,22 @@
  */
 package br.com.grupocampanha.xml;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
  * @author jfc
  */
-public class XMLCab {
+public class DocumentCab {
 
     Map<String, String> propeties = new HashMap();
 
-    public XMLCab() {
+    public DocumentCab() {
         propeties.put("version", "1.0");
     }
 
-    public XMLCab(String version) {
+    public DocumentCab(String version) {
         if (version == null || version.isEmpty())
             throw new RuntimeException("versao nao pode estar vazia");
         propeties.put("version", version);
@@ -37,7 +35,7 @@ public class XMLCab {
         this.propeties.replace(key, value);
     }
 
-    public XMLCab addPropetie(String key, String value) {
+    public DocumentCab addPropetie(String key, String value) {
         if (key == null || key.isEmpty())
             throw new RuntimeException("key sem valor");
         if (value == null)

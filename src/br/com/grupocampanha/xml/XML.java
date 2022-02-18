@@ -9,6 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Stack;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  *
@@ -16,7 +23,8 @@ import java.util.Stack;
  */
 public class XML {
 
-    public Document parse(File file) throws UnformattedXmlException, IOException {
+    public static Document parse(File file) throws UnformattedXmlException, IOException {
+        
         if (!file.exists())
             throw new IOException("Arquivo nao existe");
         String filename = file.getName();
@@ -25,8 +33,25 @@ public class XML {
         return parse(new String(Files.readAllBytes(file.toPath())), filename);
 
     }
+    
+    public static  Document parse(org.w3c.dom.Document doc) throws UnformattedXmlException {
+        TransformerFactory tranFactory = TransformerFactory.newInstance();
+    
+        try {
+              Transformer aTransformer = tranFactory.newTransformer();
+                      Source src = new DOMSource(doc);
+        File file = new File("xml.xml");
+        Result dest = new StreamResult(file);
+        aTransformer.transform(src, dest);
+         return parse(file);
+        } catch ( IOException | TransformerException ex) {
+           ex.printStackTrace();
+        }
+        return null;
+    }
 
-    public Document parse(String xml, String docName) throws UnformattedXmlException {
+
+    public static Document parse(String xml, String docName) throws UnformattedXmlException {
         Document doc = new Document(docName);
         doc.cab = null;
         Stack<Node> stackNodes = new Stack();
@@ -91,16 +116,16 @@ public class XML {
 
     }
 
-    private void nodeValueValidator(String nodeValue) throws UnformattedXmlException {
+    private static void nodeValueValidator(String nodeValue) throws UnformattedXmlException {
 
     }
 
-    private void validateNodeName(String name) throws UnformattedXmlException {
+    private static void validateNodeName(String name) throws UnformattedXmlException {
         if (!name.chars().allMatch(Character::isAlphabetic))
             throw new UnformattedXmlException("o node de nome´" + name + " é invalido");
     }
 
-    private void createNewNode(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
+    private static void createNewNode(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
         if (Execution.PROCEED.equals(alternativeExecutions(frag, doc, stackNodes))) {
             Node node = createDefaultNode(frag);
             if (!node.isFechamento())
@@ -109,7 +134,7 @@ public class XML {
         }
     }
 
-    private Node createDefaultNode(String frag) throws UnformattedXmlException {
+    private  static Node createDefaultNode(String frag) throws UnformattedXmlException {
         char[] chars = frag.toCharArray();
         String nome = "";
         Node node = null;
@@ -165,17 +190,17 @@ public class XML {
         return node;
     }
 
-    private boolean isEspecialChar(char c) {
+    private static boolean isEspecialChar(char c) {
         return c == '\n' || c == '\t' || c == '\b' || c == '\r';
 
     }
 
-    private void validarNomePropriedade(String propetieName, String nodename) throws UnformattedXmlException {
+    private static void validarNomePropriedade(String propetieName, String nodename) throws UnformattedXmlException {
         if (!propetieName.chars().boxed().allMatch(Character::isAlphabetic))
             throw new UnformattedXmlException("node de nome: " + nodename + "contem uma propriedade invalida");
     }
 
-    private Execution alternativeExecutions(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
+    private static Execution alternativeExecutions(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
         //COMENTARIO
         if (frag.startsWith("!--") && frag.endsWith("--")) {
             stackNodes.peek().addComentario(frag);
@@ -195,7 +220,7 @@ public class XML {
             Node node = createDefaultNode(frag.replace("?", ""));
             if (node.getPropriedade("version") == null || node.getPropriedade("version").isEmpty())
                 throw new UnformattedXmlException("Era esperado a versao");
-            XMLCab cab = new XMLCab();
+            DocumentCab cab = new DocumentCab();
             cab.propeties = node.propriedades;
             doc.setRootNode(node);
             doc.cab = cab;
@@ -204,7 +229,7 @@ public class XML {
         return Execution.PROCEED;
     }
 
-    private Operation nodeOperation(String frag) {
+    private static Operation nodeOperation(String frag) {
         char[] chars = frag.toCharArray();
         if (chars[chars.length - 1] == '/')
             return Operation.BOTH;
