@@ -197,8 +197,9 @@ public class XML {
     }
 
     private static void validarNomePropriedade(String propetieName, String nodename) throws UnformattedXmlException {
-        if (!propetieName.chars().boxed().allMatch(Character::isAlphabetic))
-            throw new UnformattedXmlException("node de nome: " + nodename + "contem uma propriedade invalida");
+        //NOT USED
+        //if (!propetieName.chars().boxed().allMatch(Character::isAlphabetic))
+        //   throw new UnformattedXmlException("node de nome: " + nodename + "contem uma propriedade invalida");
     }
 
     private static Execution alternativeExecutions(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
