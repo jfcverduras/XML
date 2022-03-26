@@ -159,7 +159,7 @@ public class XML {
             else if (node == null && c == ' ') {
                 validateNodeName(nome);
                 node = new Node(nome);
-            } else if (c != ' ' && c != '\'' c != '\"' && (propetieName.equals("") && !isEspecialChar(c) || (!waitingForQuoute && lastchar == propetieName.charAt(propetieName.length() - 1))))
+            } else if (c != ' ' && c != '\'' && c != '\"' && (propetieName.equals("") && !isEspecialChar(c) || (!waitingForQuoute && lastchar == propetieName.charAt(propetieName.length() - 1))))
                 propetieName += c;
             else if (!propetieName.isEmpty() && c == '=' && !waitingForQuoute)
                 waitingForQuoute = true;
