@@ -14,6 +14,7 @@ import java.io.IOException;
  *
  * @author jfc
  */
+
 public class Document  {
 
     protected DocumentCab cab;
@@ -68,7 +69,4 @@ public class Document  {
         writer = new BufferedWriter(new FileWriter(newFile));
         writer.write(value);
         writer.close();
-
-    }
-
 }

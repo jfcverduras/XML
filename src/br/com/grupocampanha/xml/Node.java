@@ -8,8 +8,6 @@ import br.com.grupocampanha.xml.interfaces.Find;
 import br.com.grupocampanha.xml.interfaces.NodeValue;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,7 @@ public class Node implements NodeValue {
     protected Node() {
         this.isFechamento = false;
     }
-    
+   
     public Node(String nome) {
         this();
         if (nome == null || nome.isEmpty())
@@ -103,7 +101,6 @@ public class Node implements NodeValue {
                 tamanho--;
                 break;
             }
-        
     }
     
     public void remove(int index) {
@@ -115,6 +112,7 @@ public class Node implements NodeValue {
         nodes = (Node[]) redimensionarArray(nodes, nodes.length - 1);
         tamanho--;
     }
+
     
     public void removeAllPropeties() {
         Set<String> keys = this.propriedades.keySet();
