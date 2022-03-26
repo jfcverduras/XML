@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Set;
 public class Node implements NodeValue {
     
     protected Map<String, String> propriedades = new HashMap<String, String>();
