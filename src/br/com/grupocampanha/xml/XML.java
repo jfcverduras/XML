@@ -159,11 +159,11 @@ public class XML {
             else if (node == null && c == ' ') {
                 validateNodeName(nome);
                 node = new Node(nome);
-            } else if (c != ' ' && c != '\'' && c != '\"' && c != '=' && (propetieName.equals("") && !isEspecialChar(c) || (!waitingForQuoute && lastchar == propetieName.charAt(propetieName.length() - 1))))
+            } else if (c != ' ' && c != '\'' && c != '\"' && c != '=' && (propetieName.equals("") && !isEspecialChar(c) || (!propetieName.isEmpty() && !waitingForQuoute && lastchar == propetieName.charAt(propetieName.length() - 1))))
                 propetieName += c;
             else if (!propetieName.isEmpty() && c == '=' && !waitingForQuoute)
                 waitingForQuoute = true;
-            else if (!waitingForQuoute && !quoteOpened && lastchar != propetieName.charAt(propetieName.length() - 1))
+            else if (!waitingForQuoute && !quoteOpened && !propetieName.isEmpty() && lastchar != propetieName.charAt(propetieName.length() - 1))
                 throw new UnformattedXmlException("o node: " + nome + " contem propriedades invalidas");
             else if (c != ' ' && c != '\t' && c != '\r' && c != '\n' && c != '\'' && c != '\"' && waitingForQuoute && !quoteOpened)
                 throw new UnformattedXmlException("o node: " + nome + " contem valores de propriedade fora de aspas");
