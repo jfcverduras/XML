@@ -121,8 +121,9 @@ public class XML {
     }
 
     private static void validateNodeName(String name) throws UnformattedXmlException {
-        if (!name.chars().allMatch(Character::isAlphabetic))
-            throw new UnformattedXmlException("o node de nome´" + name + " é invalido");
+       //NOT USED
+        // if (!name.chars().allMatch(Character::isAlphabetic))
+         //   throw new UnformattedXmlException("o node de nome´" + name + " é invalido");
     }
 
     private static void createNewNode(String frag, Document doc, Stack<Node> stackNodes) throws UnformattedXmlException {
