@@ -13,5 +13,10 @@ public class UnformattedXmlException extends Exception{
     public UnformattedXmlException(){
     super("XML mal formatado");
     }
-    
+     public UnformattedXmlException(){
+        super("XML mal formatado");
+    }
+    public UnformattedXmlException(int i){
+        super("XML mal formatado na perto da linha" +i);
+    }
 }
