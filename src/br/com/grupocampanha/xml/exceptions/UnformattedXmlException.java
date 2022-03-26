@@ -13,8 +13,8 @@ public class UnformattedXmlException extends Exception{
     public UnformattedXmlException(){
     super("XML mal formatado");
     }
-     public UnformattedXmlException(){
-        super("XML mal formatado");
+     public UnformattedXmlException(String s){
+        super(s;
     }
     public UnformattedXmlException(int i){
         super("XML mal formatado na perto da linha" +i);
