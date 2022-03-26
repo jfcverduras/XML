@@ -163,7 +163,7 @@ public class XML {
                 propetieName += c;
             else if (!propetieName.isEmpty() && c == '=' && !waitingForQuoute)
                 waitingForQuoute = true;
-            else if (Character.isAlphabetic(c) && !waitingForQuoute && !quoteOpened && lastchar != propetieName.charAt(propetieName.length() - 1))
+            else if (!waitingForQuoute && !quoteOpened && lastchar != propetieName.charAt(propetieName.length() - 1))
                 throw new UnformattedXmlException("o node: " + nome + " contem propriedades invalidas");
             else if (c != ' ' && c != '\t' && c != '\r' && c != '\n' && c != '\'' && c != '\"' && waitingForQuoute && !quoteOpened)
                 throw new UnformattedXmlException("o node: " + nome + " contem valores de propriedade fora de aspas");
