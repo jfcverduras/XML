@@ -69,4 +69,5 @@ public class Document  {
         writer = new BufferedWriter(new FileWriter(newFile));
         writer.write(value);
         writer.close();
+    }
 }
