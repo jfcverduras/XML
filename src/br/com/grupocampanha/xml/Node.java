@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-
+import java.util.List;
 public class Node implements NodeValue {
     
     protected Map<String, String> propriedades = new HashMap<String, String>();
