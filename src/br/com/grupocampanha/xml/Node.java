@@ -273,7 +273,7 @@ public class Node implements NodeValue {
         String comentarios = commentsToString(tab, node);
         String propeties = propetiesToString(node);
         StringBuilder sb = new StringBuilder();
-        if (node.valor == null && comentarios.isEmpty())
+        if (node.valor == null && comentarios.isEmpty() && node.nodes.length == 0 )
             sb.append("<").append(node.nome).append(propeties).append(" />").append("\n");
         
         if (node.valor != null && !comentarios.isEmpty())

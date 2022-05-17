@@ -63,7 +63,7 @@ public class Document  {
         } else
             newFile = file;
 
-        String value = cab.toString() + "\n";
+        String value = cab != null ? cab.toString() + "\n" : "";
         value += node.toString();
         BufferedWriter writer = null;
         writer = new BufferedWriter(new FileWriter(newFile));

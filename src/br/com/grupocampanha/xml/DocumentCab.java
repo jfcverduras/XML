@@ -57,6 +57,7 @@ public class DocumentCab {
     @Override
     public String toString() {
         String s = "<?xml ";
+       
         String[] k = this.propeties.keySet().toArray(new String[0]);
         String[] v = this.propeties.values().toArray(new String[0]);
         for (int i = 0; i < this.propeties.size(); i++)
