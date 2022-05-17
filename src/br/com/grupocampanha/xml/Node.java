@@ -314,7 +314,7 @@ public class Node implements NodeValue {
     private String propetiesToString(Node node) {
         StringBuilder sb = new StringBuilder();
         node.propriedades.keySet().forEach(key -> {
-            sb.append(" ").append(key).append(" = '").append(propriedades.get(key)).append("'");
+            sb.append(" ").append(key).append(" = '").append(node.propriedades.get(key)).append("'");
         });
         return sb.toString();
     }
